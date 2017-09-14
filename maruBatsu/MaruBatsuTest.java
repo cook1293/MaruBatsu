@@ -39,12 +39,12 @@ public class MaruBatsuTest {
 
 	//テストゲーム
 	static void gameTest(int method, int gamesCnt){
-		int games = 1;
+		int games = 0;
 		int judge = 0;
 		int winDraw = 0;
 		int win = 0;
 
-		while(games <= gamesCnt){
+		while(games < gamesCnt){
 			mbData.startTrain();
 
 			while(true){

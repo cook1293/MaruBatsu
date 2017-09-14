@@ -8,6 +8,7 @@ CPUとマルバツゲームの対戦ができるJavaアプリケーション。�
 |:-|:-|:-|
 |1.0|2017/09/13|初版。|
 |1.1|2017/09/14|簡易戦略のアルゴリズムを改良。|
+|1.2|2017/09/14|比較テストの計算を修正。|
 
 ## ファイル構成
 #### ソースファイル
@@ -15,12 +16,12 @@ CPUとマルバツゲームの対戦ができるJavaアプリケーション。�
 - MaruBatsuBasic.java：マルバツゲームの基本データクラス。
 - MaruBatsuGUI.java：マルバツゲームの画面処理を行うクラス。
 - MaruBatsuQlearning.java：Q学習の戦略を行うクラス。
-- MaruBatsuTest.java：CPUの各戦略の比較を行うクラス。
+- MaruBatsuTest.java：CPUの各戦略の比較テストを行うクラス。
 - ConvertBasicNum.java：Q学習で用いる基数変換クラス。
 
 #### 実行ファイル
 - MaruBatsuMain.java：マルバツゲームを開始するときに実行。
-- MaruBatsuTest.java：CPUの各戦略の比較を行うときに実行。
+- MaruBatsuTest.java：CPUの各戦略の比較テストを行うときに実行。
 
 ## CPUの各戦略の紹介
 - ランダム：ランダムにマークを描く。※起動時のデフォルトはランダム戦略。
