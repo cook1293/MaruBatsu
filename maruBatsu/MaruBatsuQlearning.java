@@ -116,8 +116,8 @@ public class MaruBatsuQlearning {
 				nowR = 0;
 			}
 			if(judge == 0){
-				//訓練用CPUの行動
-				mbData.enemyAction(method);
+				//訓練用CPUの行動(人間の代わり)
+				mbData.cpuAction(method, 1);
 				judge = mbData.judge();	//判定
 
 				if(judge == 1){			//CPUの負け

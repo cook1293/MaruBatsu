@@ -182,10 +182,10 @@ public class MaruBatsuGUI extends JFrame{
 					judge = mbData.judge();
 					repaint();
 
-					//敵の行動
+					//CPUの行動
 					if(judge == 0){
 						if(method != 2){
-							mbData.enemyAction(method);
+							mbData.cpuAction(method, -1);
 						} else {	//Q学習後の行動のみ別指定
 							mbq.qlearnMethod();
 						}

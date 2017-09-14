@@ -53,7 +53,7 @@ public class MaruBatsuTest {
 				if(method == 2){
 					mbq.qlearnMethod();
 				} else {
-					mbData.enemyAction(method);
+					mbData.cpuAction(method, -1);
 				}
 
 				judge = mbData.judge();
@@ -66,7 +66,7 @@ public class MaruBatsuTest {
 					}
 					break;
 				} else {
-					mbData.enemyAction(1);	//敵CPUの行動
+					mbData.cpuAction(1, 1);		//相手CPU(人間の代わり)の行動
 				}
 
 				judge = mbData.judge();

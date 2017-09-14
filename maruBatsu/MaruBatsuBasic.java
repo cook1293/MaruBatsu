@@ -11,10 +11,10 @@ import java.util.Random;
 public class MaruBatsuBasic {
 	 Random rand = new Random();
 
-	//ゲームの盤面 0:空白, 1:人間(○), -1:CPU(×)
+	//ゲームの盤面 0:空白, 1:人間・訓練用CPU(○), -1:CPU(×)
 	int[][] field = new int[3][3];
 
-	//ターン 1:人間(○), -1:CPU(×)
+	//ターン 1:人間・訓練用CPU(○), -1:CPU(×)
 	int turn = 0;
 
 
@@ -33,7 +33,7 @@ public class MaruBatsuBasic {
 		turn = rand.nextInt(2);
 		if(turn == 0) {
 			turn = -1;
-			enemyAction(0);
+			cpuAction(0, -1);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class MaruBatsuBasic {
 		if(turn == 0) {
 			turn = -1;
 		} else {
-			enemyAction(0);
+			cpuAction(0, 1);	//訓練用CPUは人間の代わり
 		}
 
 	}
@@ -70,20 +70,22 @@ public class MaruBatsuBasic {
 		return false;
 	}
 
-	//敵の行動
-	//敵の行動基準 0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
-	void enemyAction(int method){
+	//CPUの行動
+	//CPUの行動基準 0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
+	void cpuAction(int method, int myTurn){
 		double r;
 		if(method == 0){		//ランダム
 			randomMethod();
+
 		} else if(method == 1){	//簡易戦略
-			easyMethod();
+			easyMethod(myTurn);
+
 		} else if(method == 3){	//訓練時はランダムと簡易戦略のいずれか
 			r = rand.nextDouble();
 			if(r < 0.5){
 				randomMethod();
 			} else {
-				easyMethod();
+				easyMethod(myTurn);
 			}
 		}
 	}
@@ -100,14 +102,20 @@ public class MaruBatsuBasic {
 	}
 
 	//簡易戦略的な手
-	void easyMethod(){
+	//myTurn 1:人間の代わりとして(訓練用CPU) -1:人間の敵として
+	void easyMethod(int myTurn){
 		int tmp;
 		int blank = 0;
 		boolean marked = false;
+		int myMarks = 2 * myTurn;
+		int enemyMarks = -2 * myTurn;
 
-		//○か×が2つ並んでいるラインがあれば、そのラインの空いているマスにマークを書く
-		//それ以外であればランダム
+		//以下の優先順位で実行
+		//1. 自身のマークが2つ並んでいるラインがあれば、そのラインの空いているマスにマークを描く
+		//2. 相手のマークが2つ並んでいるラインがあれば、そのラインの空いているマスにマークを描く
+		//3. ランダムの空いているマスにマークを描く
 
+		//自身のマークの並びチェック
 		//横のラインチェック
 		for(int i=0; i<field.length; i++){
 			tmp = 0;
@@ -117,12 +125,11 @@ public class MaruBatsuBasic {
 					blank = j;
 				}
 			}
-			if(tmp == 2 || tmp == -2){
+			if(tmp == myMarks){
 				mark(i, blank);
 				return;
 			}
 		}
-
 		//縦のラインチェック
 		for(int j=0; j<field[0].length; j++){
 			tmp = 0;
@@ -132,12 +139,11 @@ public class MaruBatsuBasic {
 					blank = i;
 				}
 			}
-			if(tmp == 2 || tmp == -2){
+			if(tmp == myMarks){
 				mark(blank, j);
 				return;
 			}
 		}
-
 		//斜めのラインチェック
 		tmp = 0;
 		for(int i=0; i<field.length; i++){
@@ -146,11 +152,10 @@ public class MaruBatsuBasic {
 				blank = i;
 			}
 		}
-		if(tmp == 2 || tmp == -2){
+		if(tmp == myMarks){
 			mark(blank, blank);
 			return;
 		}
-
 		tmp = 0;
 		for(int i=0; i<field.length; i++){
 			tmp += field[field.length-i-1][i];
@@ -158,7 +163,60 @@ public class MaruBatsuBasic {
 				blank = i;
 			}
 		}
-		if(tmp == 2 || tmp == -2){
+		if(tmp == myMarks){
+			mark(field.length-blank-1, blank);
+			return;
+		}
+
+		//相手のマークの並びチェック
+		//横のラインチェック
+		for(int i=0; i<field.length; i++){
+			tmp = 0;
+			for(int j=0; j<field[i].length; j++){
+				tmp += field[i][j];
+				if(field[i][j] == 0){
+					blank = j;
+				}
+			}
+			if(tmp == enemyMarks){
+				mark(i, blank);
+				return;
+			}
+		}
+		//縦のラインチェック
+		for(int j=0; j<field[0].length; j++){
+			tmp = 0;
+			for(int i=0; i<field.length; i++){
+				tmp += field[i][j];
+				if(field[i][j] == 0){
+					blank = i;
+				}
+			}
+			if(tmp == enemyMarks){
+				mark(blank, j);
+				return;
+			}
+		}
+		//斜めのラインチェック
+		tmp = 0;
+		for(int i=0; i<field.length; i++){
+			tmp += field[i][i];
+			if(field[i][i] == 0){
+				blank = i;
+			}
+		}
+		if(tmp == enemyMarks){
+			mark(blank, blank);
+			return;
+		}
+		tmp = 0;
+		for(int i=0; i<field.length; i++){
+			tmp += field[field.length-i-1][i];
+			if(field[field.length-i-1][i] == 0){
+				blank = i;
+			}
+		}
+		if(tmp == enemyMarks){
 			mark(field.length-blank-1, blank);
 			return;
 		}
@@ -174,7 +232,7 @@ public class MaruBatsuBasic {
 	}
 
 
-	//勝敗判定 0:続行 1:人間の勝ち -1:CPUの勝ち 99:引き分け
+	//勝敗判定 0:続行 1:○の勝ち -1:×の勝ち 99:引き分け
 	int judge(){
 		int tmp;
 
