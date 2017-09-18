@@ -7,12 +7,10 @@ package maruBatsu;
 
 public class MaruBatsuTest {
 	static MaruBatsuBasic mbData;
-	static MaruBatsuQlearning mbq;
 
 	public static void main(String[] args) {
 		// TODO 自動生成されたメソッド・スタブ
 		mbData = new MaruBatsuBasic();
-		mbq = new MaruBatsuQlearning(mbData, 0.8, 0.2, 0.3);
 
 
 		//ゲーム回数
@@ -21,7 +19,7 @@ public class MaruBatsuTest {
 		int learnCnt = 100000;
 
 		//Q学習
-		mbq.qlearn(learnCnt);
+		mbData.qlearning(learnCnt);
 
 		//テストゲーム
 		System.out.println();
@@ -38,6 +36,7 @@ public class MaruBatsuTest {
 	}
 
 	//テストゲーム
+	//対象CPUの行動基準	0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
 	static void gameTest(int method, int gamesCnt){
 		int games = 0;
 		int judge = 0;
@@ -50,11 +49,7 @@ public class MaruBatsuTest {
 			while(true){
 
 				//対象CPUの行動
-				if(method == 2){
-					mbq.qlearnMethod();
-				} else {
-					mbData.cpuAction(method, -1);
-				}
+				mbData.cpuAction(method, -1);
 
 				judge = mbData.judge();
 				if(judge != 0) {

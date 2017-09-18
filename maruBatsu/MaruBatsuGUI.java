@@ -30,9 +30,8 @@ public class MaruBatsuGUI extends JFrame{
 	//勝敗判定
 	int judge = 0;
 
-	//敵の行動基準	0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
+	//CPUの行動基準	0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
 	int method = 0;
-
 
 	//GUI部品
 	MBPanel pn = new MBPanel();
@@ -141,6 +140,7 @@ public class MaruBatsuGUI extends JFrame{
 
 			//リセット
 			if(ae.getSource() == resetBtn){
+
 				//選択された行動基準を設定
 				for(int i=0; i<methodRB.length; i++){
 					if(methodRB[i].isSelected()){
@@ -148,14 +148,12 @@ public class MaruBatsuGUI extends JFrame{
 					}
 				}
 
-				//Q学習時の初期設定・学習
+				//Q学習時は学習回数を指定して学習
 				if(method == 2){
-					//Q学習 (フィールドデータ, 割引率, 学習率, ε)
-					mbq = new MaruBatsuQlearning(mbData, 0.8, 0.2, 0.3);
-					mbq.qlearn(100000);
+					mbData.qlearning(100000);
 				}
 
-				mbData.startGame();
+				mbData.startGame(method);
 				judge = 0;
 
 				repaint();
@@ -184,11 +182,8 @@ public class MaruBatsuGUI extends JFrame{
 
 					//CPUの行動
 					if(judge == 0){
-						if(method != 2){
-							mbData.cpuAction(method, -1);
-						} else {	//Q学習後の行動のみ別指定
-							mbq.qlearnMethod();
-						}
+
+						mbData.cpuAction(method, -1);
 
 						judge = mbData.judge();
 						repaint();

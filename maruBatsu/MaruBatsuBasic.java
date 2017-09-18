@@ -10,6 +10,7 @@ import java.util.Random;
 
 public class MaruBatsuBasic {
 	 Random rand = new Random();
+	 MaruBatsuQlearning mbq;
 
 	//ゲームの盤面 0:空白, 1:人間・訓練用CPU(○), -1:CPU(×)
 	int[][] field = new int[3][3];
@@ -18,22 +19,21 @@ public class MaruBatsuBasic {
 	int turn = 0;
 
 
-	//int method = 0;
-
 	//コンストラクタ
 	MaruBatsuBasic(){
-		startGame();
+		startGame(0);
 	}
 
 	//ゲームの開始
-	void startGame(){
+	//CPUの行動基準	0:ランダム, 1:簡易戦略, 2:Q学習, 3:Q学習時訓練用
+	void startGame(int method){
 		resetField();
 
 		//先攻後攻はランダム
 		turn = rand.nextInt(2);
 		if(turn == 0) {
 			turn = -1;
-			cpuAction(0, -1);
+			cpuAction(method, -1);
 		}
 	}
 
@@ -49,6 +49,13 @@ public class MaruBatsuBasic {
 			cpuAction(0, 1);	//訓練用CPUは人間の代わり
 		}
 
+	}
+
+	//Q学習の初期設定・学習
+	void qlearning(int learningCnt){
+		//Q学習 (フィールドデータ, 割引率, 学習率, ε)
+		mbq = new MaruBatsuQlearning(this, 0.8, 0.2, 0.3);
+		mbq.qlearn(learningCnt);
 	}
 
 	//フィールドのリセット
@@ -80,7 +87,10 @@ public class MaruBatsuBasic {
 		} else if(method == 1){	//簡易戦略
 			easyMethod(myTurn);
 
-		} else if(method == 3){	//訓練時はランダムと簡易戦略のいずれか
+		} else if(method == 2){	//Q学習
+			mbq.qlearnMethod();
+
+		} else if(method == 3){	//Q学習訓練時はランダムと簡易戦略のいずれか
 			r = rand.nextDouble();
 			if(r < 0.5){
 				randomMethod();
