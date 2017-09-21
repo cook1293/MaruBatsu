@@ -97,7 +97,7 @@ public class MaruBatsuQlearning {
 		int hashNum, nextHashNum;
 		int place;
 		int judge = 0;
-		int nowR;
+		int nowR, win=10, draw=0, lose=-100;
 		double maxNextQ;
 
 		int games  = 1;
@@ -111,9 +111,9 @@ public class MaruBatsuQlearning {
 			nowR = 0;
 			//報酬の計算
 			if(judge == -1){			//CPUの勝ち
-				nowR = 10;
+				nowR = win;
 			} else if(judge == 99){		//引き分け
-				nowR = 0;
+				nowR = draw;
 			}
 			if(judge == 0){
 				//訓練用CPUの行動(人間の代わり)
@@ -121,9 +121,9 @@ public class MaruBatsuQlearning {
 				judge = mbData.judge();	//判定
 
 				if(judge == 1){			//CPUの負け
-					nowR = -100;
+					nowR = lose;
 				} else if(judge == 99){	//引き分け
-					nowR = 0;
+					nowR = draw;
 				}
 			}
 
