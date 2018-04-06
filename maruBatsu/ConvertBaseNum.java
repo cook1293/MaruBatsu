@@ -2,7 +2,7 @@ package maruBatsu;
 
 /**
  * 基数変換クラス
- * @author proglight
+ * @author cook1293
  */
 
 public class ConvertBaseNum {

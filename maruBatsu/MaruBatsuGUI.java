@@ -17,7 +17,7 @@ import javax.swing.JRadioButton;
 
 /**
  * マルバツゲームの画面処理
- * @author proglight
+ * @author cook1293
  */
 
 public class MaruBatsuGUI extends JFrame{

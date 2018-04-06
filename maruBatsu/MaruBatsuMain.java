@@ -2,7 +2,7 @@ package maruBatsu;
 
 /**
  * マルバツゲームの実行クラス
- * @author proglight
+ * @author cook1293
  */
 
 public class MaruBatsuMain {

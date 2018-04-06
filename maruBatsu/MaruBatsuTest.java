@@ -2,7 +2,7 @@ package maruBatsu;
 
 /**
  * マルバツゲーム各手法の比較
- * @author proglight
+ * @author cook1293
  */
 
 public class MaruBatsuTest {

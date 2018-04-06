@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * マルバツゲームの基本データ
- * @author proglight
+ * @author cook1293
  */
 
 

@@ -4,7 +4,7 @@ import java.util.Random;
 
 /**
  * Q学習によるマルバツゲーム
- * @author proglight
+ * @author cook1293
  */
 
 public class MaruBatsuQlearning {
